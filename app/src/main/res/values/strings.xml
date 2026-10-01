@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TopoUTM GPS</string>
+    <string name="nav_map">Mapa &amp; GPS</string>
+    <string name="nav_points">Pontos UTM</string>
+    <string name="nav_cad">Visualizador CAD</string>
+    <string name="nav_projects">Projetos</string>
+    <string name="btn_save_point">Registrar Ponto</string>
+    <string name="btn_export_dxf">Exportar DXF</string>
+</resources>
