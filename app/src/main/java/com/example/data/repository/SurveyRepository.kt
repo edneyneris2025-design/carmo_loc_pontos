@@ -17,12 +17,13 @@ class SurveyRepository(private val surveyDao: SurveyDao) {
 
     suspend fun getProjectSync(projectId: Long): SurveyProject? = surveyDao.getProjectByIdSync(projectId)
 
-    suspend fun createProject(name: String, description: String = "", utmZone: Int = 23, hemisphere: Char = 'S'): Long {
+    suspend fun createProject(name: String, description: String = "", utmZone: Int = 24, hemisphere: Char = 'S'): Long {
         val project = SurveyProject(
             name = name,
             description = description,
             utmZone = utmZone,
-            hemisphere = hemisphere
+            hemisphere = hemisphere,
+            datum = "SIRGAS 2000"
         )
         return surveyDao.insertProject(project)
     }
@@ -58,7 +59,9 @@ class SurveyRepository(private val surveyDao: SurveyDao) {
         val finalName = if (!pointName.isNullOrBlank()) pointName else String.format(Locale.US, "P%03d", nextSeq)
 
         val project = surveyDao.getProjectByIdSync(projectId)
-        val utm = CoordinateUtils.toUtm(latitude, longitude, forcedZone = project?.utmZone)
+        val targetZone = project?.utmZone ?: 24
+        val targetHemisphere = project?.hemisphere ?: 'S'
+        val utm = CoordinateUtils.toUtm(latitude, longitude, forcedZone = targetZone, forcedHemisphere = targetHemisphere)
 
         val point = SurveyPoint(
             projectId = projectId,
@@ -143,7 +146,9 @@ class SurveyRepository(private val surveyDao: SurveyDao) {
         accuracy: Float
     ): Long {
         val project = surveyDao.getProjectByIdSync(projectId)
-        val utm = CoordinateUtils.toUtm(latitude, longitude, forcedZone = project?.utmZone)
+        val targetZone = project?.utmZone ?: 24
+        val targetHemisphere = project?.hemisphere ?: 'S'
+        val utm = CoordinateUtils.toUtm(latitude, longitude, forcedZone = targetZone, forcedHemisphere = targetHemisphere)
         val trackPoint = TrackPoint(
             projectId = projectId,
             latitude = latitude,

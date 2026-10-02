@@ -14,6 +14,27 @@ import java.io.ByteArrayInputStream
 class CoordinateAndDxfUnitTest {
 
     @Test
+    fun testSirgas2000UtmZone24SConversion() {
+        // Test Zone 24S location (e.g. Bahia, Brazil, Central Meridian -39°)
+        val lat = -12.9714
+        val lon = -38.5014
+
+        val zone = CoordinateUtils.calculateZone(lon)
+        assertEquals(24, zone)
+
+        val utm = CoordinateUtils.toUtm(lat, lon, forcedZone = 24, forcedHemisphere = 'S')
+        assertEquals(24, utm.zone)
+        assertEquals('S', utm.hemisphere)
+        assertTrue("Easting should be approx 554100m in zone 24S", utm.easting in 550000.0..560000.0)
+        assertTrue("Northing should be approx 8565500m in zone 24S", utm.northing in 8550000.0..8580000.0)
+
+        // Convert back to Lat/Lon
+        val latLon = CoordinateUtils.toLatLon(utm)
+        assertEquals(lat, latLon.latitude, 0.0001)
+        assertEquals(lon, latLon.longitude, 0.0001)
+    }
+
+    @Test
     fun testUtmConversionAndReversibility() {
         // Test São Paulo / Brazil coordinate (Zone 23S)
         val lat = -23.550520

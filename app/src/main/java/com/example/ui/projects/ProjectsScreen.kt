@@ -246,7 +246,7 @@ fun ProjectsScreen(
     if (showCreateDialog) {
         var name by remember { mutableStateOf("") }
         var desc by remember { mutableStateOf("") }
-        var zoneText by remember { mutableStateOf((gpsStatus.utm.zone.takeIf { it in 1..60 } ?: 23).toString()) }
+        var zoneText by remember { mutableStateOf((gpsStatus.utm.zone.takeIf { it in 1..60 } ?: 24).toString()) }
         var hemisphere by remember { mutableStateOf(gpsStatus.utm.hemisphere) }
 
         AlertDialog(
@@ -295,7 +295,7 @@ fun ProjectsScreen(
                         }
                     }
                     Text(
-                        text = "Datum geodésico padrão: SIRGAS 2000 / WGS 84",
+                        text = "Datum geodésico padrão: SIRGAS 2000",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -304,7 +304,7 @@ fun ProjectsScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        val zone = zoneText.toIntOrNull()?.coerceIn(1, 60) ?: 23
+                        val zone = zoneText.toIntOrNull()?.coerceIn(1, 60) ?: 24
                         onCreateProject(name, desc, zone, hemisphere)
                         showCreateDialog = false
                     },

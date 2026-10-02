@@ -44,9 +44,9 @@ fun SatelliteMapView(
     val scope = rememberCoroutineScope()
     val tileManager = remember { TileManager(context) }
 
-    // Map Center coordinates (Lat, Lon)
-    var centerLat by remember { mutableDoubleStateOf(gpsStatus.latitude.takeIf { it != 0.0 } ?: -23.5505) }
-    var centerLon by remember { mutableDoubleStateOf(gpsStatus.longitude.takeIf { it != 0.0 } ?: -46.6333) }
+    // Map Center coordinates (Lat, Lon) - default center in Zone 24S Brazil
+    var centerLat by remember { mutableDoubleStateOf(gpsStatus.latitude.takeIf { it != 0.0 } ?: -12.9714) }
+    var centerLon by remember { mutableDoubleStateOf(gpsStatus.longitude.takeIf { it != 0.0 } ?: -38.5014) }
     var zoomLevel by remember { mutableFloatStateOf(17.0f) }
 
     // Follow GPS mode

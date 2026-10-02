@@ -1,6 +1,6 @@
 {
   "name": "TopoUTM GPS",
-  "description": "Aplicativo profissional de topografia para cadastro de pontos sequenciais em coordenadas UTM, rastreamento de trajetória em tempo real sobre mapa de satélite, exportação DXF, suporte offline e visualização de arquivos DWG/DXF.",
+  "description": "Aplicativo profissional de topografia para cadastro de pontos sequenciais em coordenadas UTM SIRGAS 2000 Fuso 24S, rastreamento de trajetória em tempo real sobre mapa de satélite, exportação DXF, suporte offline e visualização de arquivos DWG/DXF.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

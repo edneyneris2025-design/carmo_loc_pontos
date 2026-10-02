@@ -81,19 +81,50 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
 
-        // Initialize default project if none exists
+        // Initialize default project in UTM SIRGAS 2000 Fuso 24S
         viewModelScope.launch {
             projects.take(2).collect { list ->
                 if (list.isEmpty()) {
                     val defaultId = repository.createProject(
                         name = "Levantamento Principal",
-                        description = "Projeto topográfico inicial de campo com coordenadas UTM.",
-                        utmZone = 23,
+                        description = "Projeto topográfico de campo em coordenadas UTM SIRGAS 2000 Fuso 24S.",
+                        utmZone = 24,
                         hemisphere = 'S'
                     )
                     _activeProjectId.value = defaultId
-                } else if (_activeProjectId.value == 1L && list.isNotEmpty()) {
-                    _activeProjectId.value = list.first().id
+                } else {
+                    // Migrate existing default project if it was on zone 23
+                    list.find { it.id == 1L && it.utmZone == 23 }?.let { oldPrj ->
+                        repository.updateProject(
+                            oldPrj.copy(
+                                utmZone = 24,
+                                hemisphere = 'S',
+                                datum = "SIRGAS 2000"
+                            )
+                        )
+                        val pts = repository.getPointsSync(oldPrj.id)
+                        for (pt in pts) {
+                            if (pt.utmZone == 23) {
+                                val newUtm = com.example.util.CoordinateUtils.toUtm(
+                                    pt.latitude,
+                                    pt.longitude,
+                                    forcedZone = 24,
+                                    forcedHemisphere = 'S'
+                                )
+                                repository.updatePoint(
+                                    pt.copy(
+                                        utmZone = 24,
+                                        hemisphere = 'S',
+                                        easting = newUtm.easting,
+                                        northing = newUtm.northing
+                                    )
+                                )
+                            }
+                        }
+                    }
+                    if (_activeProjectId.value == 1L && list.isNotEmpty()) {
+                        _activeProjectId.value = list.first().id
+                    }
                 }
             }
         }
@@ -158,7 +189,7 @@ class SurveyViewModel(application: Application) : AndroidViewModel(application) 
                 accuracy = gps.accuracy,
                 notes = notes
             )
-            _snackbarMessage.value = "Ponto $name registrado com sucesso! (UTM ${gps.utm.shortZoneString()})"
+            _snackbarMessage.value = "Ponto $name registrado com sucesso! (UTM ${gps.utm.shortZoneString()} SIRGAS 2000)"
         }
     }
 

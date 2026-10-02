@@ -28,7 +28,7 @@ data class GpsStatus(
     val accuracy: Float = 0.0f,
     val bearing: Float = 0.0f,
     val speed: Float = 0.0f,
-    val utm: UtmCoordinate = UtmCoordinate(23, 'S', 0.0, 0.0),
+    val utm: UtmCoordinate = UtmCoordinate(24, 'S', 0.0, 0.0),
     val timestamp: Long = 0L,
     val isTrackingActive: Boolean = false,
     val totalTrackDistance: Double = 0.0,
@@ -54,7 +54,7 @@ data class AveragingSession(
     val meanLongitude: Double = 0.0,
     val meanAltitude: Double = 0.0,
     val horizontalStdDev: Double = 0.0,
-    val utm: UtmCoordinate = UtmCoordinate(23, 'S', 0.0, 0.0)
+    val utm: UtmCoordinate = UtmCoordinate(24, 'S', 0.0, 0.0)
 )
 
 class GpsManager(private val context: Context) {
@@ -145,7 +145,7 @@ class GpsManager(private val context: Context) {
     }
 
     private fun handleNewLocation(location: Location) {
-        val utm = CoordinateUtils.toUtm(location.latitude, location.longitude)
+        val utm = CoordinateUtils.toUtm(location.latitude, location.longitude, forcedZone = 24, forcedHemisphere = 'S')
 
         // Trajectory distance computation & auto recording
         if (isRecordingTrajectory) {
@@ -206,7 +206,7 @@ class GpsManager(private val context: Context) {
                 sumDistSq += dist * dist
             }
             val stdDev = if (count > 1) sqrt(sumDistSq / (count - 1)) else location.accuracy.toDouble()
-            val avgUtm = CoordinateUtils.toUtm(meanLat, meanLon)
+            val avgUtm = CoordinateUtils.toUtm(meanLat, meanLon, forcedZone = 24, forcedHemisphere = 'S')
 
             _averagingSession.value = currentSession.copy(
                 collectedSamples = count,

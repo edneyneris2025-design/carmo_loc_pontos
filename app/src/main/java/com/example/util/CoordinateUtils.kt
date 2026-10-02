@@ -40,10 +40,10 @@ data class LatLon(
 
 object CoordinateUtils {
 
-    // WGS-84 / SIRGAS 2000 ellipsoid constants
+    // GRS-80 / SIRGAS 2000 ellipsoid constants (official IBGE / SIRGAS 2000 standard)
     private const val A = 6378137.0 // Semi-major axis (meters)
-    private const val F = 1.0 / 298.257223563 // Flattening
-    private const val B = A * (1.0 - F) // Semi-minor axis (~6356752.3142 m)
+    private const val F = 1.0 / 298.257222101 // Flattening (GRS80 / SIRGAS 2000)
+    private const val B = A * (1.0 - F) // Semi-minor axis (~6356752.31414 m)
     private const val E2 = 2 * F - F * F // First eccentricity squared (~0.00669438)
     private const val E_PRIME2 = E2 / (1.0 - E2) // Second eccentricity squared (~0.00673950)
     private const val K0 = 0.9996 // Central meridian scale factor
@@ -60,14 +60,20 @@ object CoordinateUtils {
     }
 
     /**
-     * Converts WGS84/SIRGAS2000 Latitude and Longitude to UTM
+     * Converts SIRGAS 2000 Latitude and Longitude to UTM.
+     * Supports forcing zone (e.g. 24) and hemisphere (e.g. 'S').
      */
-    fun toUtm(latitude: Double, longitude: Double, forcedZone: Int? = null): UtmCoordinate {
+    fun toUtm(
+        latitude: Double,
+        longitude: Double,
+        forcedZone: Int? = null,
+        forcedHemisphere: Char? = null
+    ): UtmCoordinate {
         val latRad = Math.toRadians(latitude)
         val lonRad = Math.toRadians(longitude)
 
         val zone = forcedZone ?: calculateZone(longitude)
-        val hemisphere = if (latitude >= 0) 'N' else 'S'
+        val hemisphere = forcedHemisphere ?: if (latitude >= 0) 'N' else 'S'
 
         // Central meridian in degrees and radians
         val centralMeridianDeg = (zone - 1) * 6 - 180 + 3

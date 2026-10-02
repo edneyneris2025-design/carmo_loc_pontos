@@ -123,7 +123,7 @@ fun MapGpsScreen(
                         )
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "Fuso: ${gpsStatus.utm.shortZoneString()} • WGS84/SIRGAS",
+                                text = "Fuso: ${gpsStatus.utm.shortZoneString()} • SIRGAS 2000",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -150,7 +150,7 @@ fun MapGpsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = MaterialTheme.colorScheme.outlineVariant)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // UTM Coordinate values display
@@ -505,8 +505,8 @@ fun MapGpsScreen(
                     }
 
                     if (isFinished) {
-                        Divider()
-                        Text("Coordenada Média Resultante:", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                        HorizontalDivider()
+                        Text("Coordenada Média Resultante (UTM 24S SIRGAS 2000):", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
                         Text("• Este (X): ${String.format(Locale.US, "%.4f m", averagingSession.utm.easting)}")
                         Text("• Norte (Y): ${String.format(Locale.US, "%.4f m", averagingSession.utm.northing)}")
                         Text("• Cota (Z): ${String.format(Locale.US, "%.3f m", averagingSession.meanAltitude)}")

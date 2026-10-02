@@ -12,9 +12,9 @@ data class SurveyProject(
     val name: String,
     val description: String = "",
     val createdAt: Long = System.currentTimeMillis(),
-    val utmZone: Int = 23,
+    val utmZone: Int = 24,
     val hemisphere: Char = 'S',
-    val datum: String = "SIRGAS 2000 / WGS 84",
+    val datum: String = "SIRGAS 2000",
     val isSynced: Boolean = false,
     val lastSyncedAt: Long? = null
 )

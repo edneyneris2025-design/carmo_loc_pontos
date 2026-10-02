@@ -73,7 +73,7 @@ fun PointsListScreen(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "${points.size} pontos cadastrados • Fuso ${currentProject?.utmZone ?: 23}${currentProject?.hemisphere ?: 'S'}",
+                            text = "${points.size} pontos cadastrados • Fuso ${currentProject?.utmZone ?: 24}${currentProject?.hemisphere ?: 'S'} • SIRGAS 2000",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -225,7 +225,7 @@ fun PointsListScreen(
     // Manual Point Add Dialog
     if (showManualAddDialog) {
         ManualPointDialog(
-            defaultZone = currentProject?.utmZone ?: 23,
+            defaultZone = currentProject?.utmZone ?: 24,
             defaultHemisphere = currentProject?.hemisphere ?: 'S',
             nextSeq = (points.maxOfOrNull { it.sequenceNumber } ?: 0) + 1,
             onDismiss = { showManualAddDialog = false },
@@ -548,7 +548,7 @@ fun PointDetailDialog(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
-                Text("• Fuso: ${point.utmZone}${point.hemisphere} (SIRGAS 2000 / WGS 84)")
+                Text("• Fuso: ${point.utmZone}${point.hemisphere} (SIRGAS 2000)")
                 Text("• Este (X): ${String.format(Locale.US, "%.4f m", point.easting)}")
                 Text("• Norte (Y): ${String.format(Locale.US, "%.4f m", point.northing)}")
                 Text("• Cota (Z): ${String.format(Locale.US, "%.3f m", point.altitude)}")
